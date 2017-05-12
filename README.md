@@ -1,2 +1,2 @@
 # magic
-a project to improve skill
+a project about network to improve skill.
