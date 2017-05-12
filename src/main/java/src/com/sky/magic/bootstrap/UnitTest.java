@@ -1,4 +1,4 @@
-package com.sky.magic;
+package com.sky.magic.bootstrap;
 
 import junit.framework.TestCase;
 
