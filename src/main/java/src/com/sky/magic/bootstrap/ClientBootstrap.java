@@ -1,5 +1,7 @@
 package com.sky.magic.bootstrap;
 
+import java.net.InetSocketAddress;
+
 import com.sky.magic.channel.ChannelFactory;
 
 /**
@@ -11,5 +13,9 @@ public class ClientBootstrap extends Bootstrap {
 	
 	public ClientBootstrap(ChannelFactory factory) {
 		super(factory);
+	}
+
+	public void connect(InetSocketAddress address) {
+		// TODO Auto-generated method stub
 	}
 }

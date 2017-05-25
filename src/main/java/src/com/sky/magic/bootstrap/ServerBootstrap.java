@@ -1,5 +1,7 @@
 package com.sky.magic.bootstrap;
 
+import java.net.InetSocketAddress;
+
 import com.sky.magic.channel.ChannelFactory;
 
 /**
@@ -11,5 +13,17 @@ public class ServerBootstrap extends Bootstrap {
 	
 	public ServerBootstrap(ChannelFactory factory) {
 		super(factory);
+	}
+	
+	public void bind(int port) {
+		bind(new InetSocketAddress(port));
+	}
+	
+	/**
+	 * 服务端绑定数据通讯端口
+	 * @param address 数据通讯地址
+	 */
+	public void bind(InetSocketAddress address) {
+		// TODO Auto-generated method stub
 	}
 }
