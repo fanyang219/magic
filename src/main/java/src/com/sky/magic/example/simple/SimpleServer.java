@@ -1,7 +1,5 @@
 package com.sky.magic.example.simple;
 
-import java.net.InetSocketAddress;
-
 import com.sky.magic.bootstrap.ServerBootstrap;
 import com.sky.magic.channel.nio.NioServerChannelFactory;
 

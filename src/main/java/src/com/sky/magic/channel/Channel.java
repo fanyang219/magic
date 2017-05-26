@@ -5,5 +5,5 @@ package com.sky.magic.channel;
  * @author xufan
  */
 public interface Channel {
-	
+	void writeData(String data);
 }

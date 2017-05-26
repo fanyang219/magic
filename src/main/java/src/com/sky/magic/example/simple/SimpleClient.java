@@ -15,12 +15,12 @@ public class SimpleClient {
 	private static final String SERVER_HOST = "127.0.0.1";
 	private static final int SERVER_PORT = 8010;
 	
-	public void start() {
+	public void connect() {
 		ClientBootstrap bootstrap = new ClientBootstrap(new NioClientChannelFactory());
 		bootstrap.connect(new InetSocketAddress(SERVER_HOST, SERVER_PORT));
 	}
 	
 	public static void main(String args[]) {
-		new SimpleClient().start();
+		new SimpleClient().connect();
 	}
 }
