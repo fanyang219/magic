@@ -14,29 +14,35 @@ public class SimpleNetworkTest extends TestCase {
 		super.setUp();
 		
 		initServer();
+		sleep(100);
 		initClient();
+		sleep(100);
 	}
 	
 	private void initServer() {
 		SimpleServer server = new SimpleServer();
 		server.start();
-		
-		// 模拟服务器启动
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void initClient() {
 		SimpleClient client = new SimpleClient();
-		client.start();
+		client.connect();
 	}
 	
 	// 发送接收数据测试(发送Hello，收到Hi)
 	public void testHello() {
 		assertTrue(true);
+		
+		
+	}
+	
+	
+	private void sleep(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void tearDown() throws Exception {
