@@ -32,8 +32,6 @@ public class SimpleNetworkTest extends TestCase {
 	// 发送接收数据测试(发送Hello，收到Hi)
 	public void testHello() {
 		assertTrue(true);
-		
-		
 	}
 	
 	
