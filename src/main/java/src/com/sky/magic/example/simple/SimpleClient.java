@@ -3,12 +3,12 @@ package com.sky.magic.example.simple;
 import java.net.InetSocketAddress;
 
 import com.sky.magic.bootstrap.ClientBootstrap;
-import com.sky.magic.channel.ChannelChain;
-import com.sky.magic.channel.ChannelChainFactory;
 import com.sky.magic.channel.ChannelEvent;
 import com.sky.magic.channel.Channels;
-import com.sky.magic.channel.EmptyChannelHandler;
 import com.sky.magic.channel.nio.NioClientChannelFactory;
+import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.EmptyChannelHandler;
+import com.sky.magic.handler.chain.ChannelChainFactory;
 
 /**
  * ¼òÒ×¿Í»§¶Ë

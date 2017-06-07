@@ -1,10 +1,10 @@
 package com.sky.magic;
 
-import com.sky.magic.channel.ChannelChain;
-import com.sky.magic.channel.ChannelHandler;
-import com.sky.magic.channel.DefaultChannelChain;
-import com.sky.magic.channel.DefaultChannelHandler;
-import com.sky.magic.channel.EmptyChannelHandler;
+import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.ChannelHandler;
+import com.sky.magic.handler.DefaultChannelHandler;
+import com.sky.magic.handler.EmptyChannelHandler;
+import com.sky.magic.handler.chain.DefaultChannelChain;
 
 import junit.framework.TestCase;
 

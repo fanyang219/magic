@@ -25,8 +25,9 @@ public class SimpleNetworkTest extends TestCase {
 	}
 	
 	private void initClient() {
+		System.out.println("");
 		SimpleClient client = new SimpleClient();
-		client.connect();
+		client.start();
 	}
 	
 	// 发送接收数据测试(发送Hello，收到Hi)

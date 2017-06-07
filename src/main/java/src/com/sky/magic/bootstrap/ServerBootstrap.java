@@ -2,6 +2,7 @@ package com.sky.magic.bootstrap;
 
 import java.net.InetSocketAddress;
 
+import com.sky.magic.channel.Channel;
 import com.sky.magic.channel.ChannelFactory;
 import com.sky.magic.util.MLog;
 
@@ -27,6 +28,15 @@ public class ServerBootstrap extends Bootstrap {
 	 */
 	public void bind(InetSocketAddress address) {
 		MLog.log(TAG, "2.Bind server port:"+address.getPort(), "server-start");
-		// TODO Auto-generated method stub
+		if(address==null) { // 保护处理
+			throw new NullPointerException("address");
+		}
+		
+		// 创建server channel
+		Channel channel = getFactory().createChannel();
+		// 设置处理器工厂，便于框架内部使用
+		channel.getConfig().setChainFactory(getChainFactory());
+		// 绑定服务，开始工作(接收客户端连接)
+		channel.bind(address);
 	}
 }
