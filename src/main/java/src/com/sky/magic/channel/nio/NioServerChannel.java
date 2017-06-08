@@ -9,7 +9,7 @@ import java.nio.channels.SocketChannel;
 
 import com.sky.magic.channel.AbstractChannel;
 import com.sky.magic.channel.ChannelException;
-import com.sky.magic.channel.EventLoop;
+import com.sky.magic.channel.nio.eventloop.EventLoop;
 import com.sky.magic.channel.nio.eventloop.NioEventLoop;
 import com.sky.magic.channel.nio.eventloop.boss.NioServerBoss;
 import com.sky.magic.util.MLog;

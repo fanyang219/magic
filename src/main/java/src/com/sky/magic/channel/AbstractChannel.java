@@ -3,7 +3,7 @@ package com.sky.magic.channel;
 import java.net.InetSocketAddress;
 
 import com.sky.magic.channel.nio.config.DefaultChannelConfig;
-import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.chain.ChannelChain;
 
 public abstract class AbstractChannel implements Channel {
 	private ChannelChain chain = null;

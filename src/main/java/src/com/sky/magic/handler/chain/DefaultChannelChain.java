@@ -5,7 +5,8 @@ import java.util.Map;
 
 import com.sky.magic.channel.ChannelEvent;
 import com.sky.magic.handler.ChannelHandler;
-import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.wrapper.ChannelHandlerWrapper;
+import com.sky.magic.handler.wrapper.DefaultChannelHandlerWrapper;
 import com.sky.magic.util.MLog;
 
 /**
@@ -17,120 +18,128 @@ import com.sky.magic.util.MLog;
 public class DefaultChannelChain implements ChannelChain {
 	private static final String TAG = DefaultChannelChain.class.getSimpleName();
 	
-	private Map<String, ChannelHandler> handlerMap = null;
-	private ChannelHandler headHandler = null;
-	private ChannelHandler tailHandler = null;
+	private Map<String, ChannelHandlerWrapper> wrapperMap = null;
+	private ChannelHandlerWrapper headWrapper = null;
+	private ChannelHandlerWrapper tailWrapper = null;
 	
 	public void addFirst(String name, ChannelHandler handler) {
-		if(headHandler==null || tailHandler==null) { // 保护处理
-			headHandler = handler;
-			tailHandler = handler;
-			getHandlerMap().put(name, handler);
+		ChannelHandlerWrapper wrapper = handlerToWrapper(name, handler);
+		
+		if(headWrapper==null || tailWrapper==null) { // 保护处理
+			headWrapper = wrapper;
+			tailWrapper = wrapper;
+			getWrapperMap().put(name, wrapper);
 			return;
 		}
 		
-		handler.setNextHandler(headHandler);
-		headHandler.setPrevHandler(handler);
+		wrapper.addBefore(headWrapper);
 		
-		getHandlerMap().put(name, handler);
+		getWrapperMap().put(name, wrapper);
 	}
 	
 	public void addLast(String name, ChannelHandler handler) {
-		if(headHandler==null || tailHandler==null) { // 保护处理
-			headHandler = handler;
-			tailHandler = handler;
-			getHandlerMap().put(name, handler);
+		ChannelHandlerWrapper wrapper = handlerToWrapper(name, handler);
+		
+		if(headWrapper==null || tailWrapper==null) { // 保护处理
+			headWrapper = wrapper;
+			tailWrapper = wrapper;
+			getWrapperMap().put(name, wrapper);
 			return;
 		}
 		
-		tailHandler.setNextHandler(handler);
-		handler.setPrevHandler(tailHandler);
 		
-		getHandlerMap().put(name, handler);
+		tailWrapper.setNextWrapper(wrapper);
+		wrapper.setPrevWrapper(tailWrapper);
+		
+		getWrapperMap().put(name, wrapper);
 	}
 
 	public void addBefore(String baseName, String name, ChannelHandler handler) {
 		// TODO name已存在
-		if(headHandler==null || tailHandler==null) { // 保护处理
+		if(headWrapper==null || tailWrapper==null) { // 保护处理
 			addFirst(name, handler);
 			return;
 		}
 		
-		ChannelHandler baseHandler = getHandlerMap().get(baseName);
-		if(baseHandler==null) { // 不存在参照handler
+		ChannelHandlerWrapper wrapper = handlerToWrapper(name, handler);
+		ChannelHandlerWrapper baseWrapper = getWrapperMap().get(baseName);
+		if(baseWrapper==null) { // 不存在参照handler
 			return;
 		}
 		
-		if(baseHandler==headHandler) { // 参照handler在头部
+		if(baseWrapper==headWrapper) { // 参照handler在头部
 			addFirst(name, handler);
 			return;
 		}
+
+		// 与参照物前面的节点绑定关系,放在baseWrapper.getPrevWrapper()后面
+		wrapper.addAfter(baseWrapper.getPrevWrapper());
+		// 与参照物绑定关系,将wrapper放在baseWrapper前面
+		wrapper.addBefore(baseWrapper);
 		
-		// 将handler放在baseHandler前面
-		// 与参照物前面的节点绑定关系
-		baseHandler.getPrevHandler().setNextHandler(handler);
-		handler.setPrevHandler(baseHandler.getPrevHandler());
-		// 与参照物绑定关系
-		handler.setNextHandler(baseHandler);
-		baseHandler.setPrevHandler(handler);
-		
-		getHandlerMap().put(name, handler);
+		getWrapperMap().put(name, wrapper);
 	}
 
 	public void addAfter(String baseName, String name, ChannelHandler handler) {
 		// TODO name已存在
-		if(headHandler==null || tailHandler==null) { // 保护处理
+		if(headWrapper==null || tailWrapper==null) { // 保护处理
 			addLast(name, handler);
 			return;
 		}
 		
-		ChannelHandler baseHandler = getHandlerMap().get(baseName);
-		if(baseHandler==null) { // 不存在参照handler
+		ChannelHandlerWrapper wrapper = handlerToWrapper(name, handler);
+		ChannelHandlerWrapper baseWrapper = getWrapperMap().get(baseName);
+		if(baseWrapper==null) { // 不存在参照handler
 			return;
 		}
 		
-		if(baseHandler==tailHandler) { // 参照handler在头部
+		if(baseWrapper==tailWrapper) { // 参照handler在头部
 			addLast(name, handler);
 			return;
 		}
 		
-		// 将handler放在baseHandler前面
-		// 与参照物后面的节点绑定关系
-		baseHandler.getNextHandler().setPrevHandler(handler);
-		handler.setNextHandler(baseHandler.getNextHandler());
-		// 与参照物绑定关系
-		handler.setPrevHandler(baseHandler);
-		baseHandler.setNextHandler(handler);
+		// 与参照物后面的节点绑定关系,放在baseWrapper.getNextWrapper()前面
+		wrapper.addBefore(baseWrapper.getNextWrapper());
+		// 与参照物绑定关系,放在baseWrapper后面
+		wrapper.addAfter(baseWrapper);
 		
-		getHandlerMap().put(name, handler);
+		getWrapperMap().put(name, wrapper);
 	}
 	
 	public void clear() {
-		getHandlerMap().clear();
+		getWrapperMap().clear();
 		
-		handlerMap = null;
-		headHandler = null;
-		tailHandler = null;
+		wrapperMap = null;
+		headWrapper = null;
+		tailWrapper = null;
+	}
+	
+	public ChannelHandlerWrapper handlerToWrapper(String name, ChannelHandler handler) {
+		return new DefaultChannelHandlerWrapper(name, handler);
 	}
 
 	public ChannelHandler getChannelHandler(String name) {
-		return getHandlerMap().get(name);
+		return getChannelHandlerWrapper(name).getHandler();
 	}
 	
-	private Map<String, ChannelHandler> getHandlerMap() {
-		if(handlerMap==null) {
-			handlerMap = new HashMap<String, ChannelHandler>();
+	public ChannelHandlerWrapper getChannelHandlerWrapper(String name) {
+		return getWrapperMap().get(name);
+	}
+	
+	private Map<String, ChannelHandlerWrapper> getWrapperMap() {
+		if(wrapperMap==null) {
+			wrapperMap = new HashMap<String, ChannelHandlerWrapper>();
 		}
-		return handlerMap;
+		return wrapperMap;
 	}
 
 	// 处理通道事件
 	public void handleEvent(ChannelEvent event) {
-		if(headHandler==null || tailHandler==null) {
+		if(headWrapper==null || tailWrapper==null) {
 			MLog.log(TAG, "The chain contains no handlers, discarding:"+event);
 			return;
 		}
 		// 链式处理事件(当前处理器执行完毕后，自动调用下一个处理器)
-		headHandler.handleEvent(event);
+		headWrapper.getHandler().handleEvent(event);
 	}
 }

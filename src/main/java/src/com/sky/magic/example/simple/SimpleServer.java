@@ -4,8 +4,8 @@ import com.sky.magic.bootstrap.ServerBootstrap;
 import com.sky.magic.channel.ChannelEvent;
 import com.sky.magic.channel.Channels;
 import com.sky.magic.channel.nio.NioServerChannelFactory;
-import com.sky.magic.handler.ChannelChain;
 import com.sky.magic.handler.EmptyChannelHandler;
+import com.sky.magic.handler.chain.ChannelChain;
 import com.sky.magic.handler.chain.ChannelChainFactory;
 import com.sky.magic.util.MLog;
 

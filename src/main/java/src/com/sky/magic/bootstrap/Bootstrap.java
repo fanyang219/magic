@@ -1,7 +1,7 @@
 package com.sky.magic.bootstrap;
 
 import com.sky.magic.channel.ChannelFactory;
-import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.chain.ChannelChain;
 import com.sky.magic.handler.chain.ChannelChainFactory;
 
 /**

@@ -5,7 +5,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
 import com.sky.magic.channel.ChannelException;
-import com.sky.magic.channel.EventLoop;
+import com.sky.magic.channel.nio.eventloop.EventLoop;
 import com.sky.magic.channel.nio.eventloop.worker.NioWorker;
 import com.sky.magic.util.MLog;
 

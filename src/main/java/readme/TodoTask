@@ -3,9 +3,13 @@
 
 
 
-待处理问题：
+优先级高：
+handler接口简化
+handler自动调用
+
+优先级低:
+ChannelChain head、tail不对
+handler检查重复名字
 接受数据缓冲利用率
 半包问题
 发送数据接口
-handler接口简化
-handler自动调用

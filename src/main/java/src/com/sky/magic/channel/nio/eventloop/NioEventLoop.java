@@ -6,7 +6,6 @@ import java.nio.channels.Selector;
 import java.util.Iterator;
 
 import com.sky.magic.channel.ChannelException;
-import com.sky.magic.channel.EventLoop;
 import com.sky.magic.util.MLog;
 
 /**

@@ -1,12 +1,13 @@
 package com.sky.magic;
 
-import com.sky.magic.handler.ChannelChain;
+import junit.framework.TestCase;
+
 import com.sky.magic.handler.ChannelHandler;
 import com.sky.magic.handler.DefaultChannelHandler;
 import com.sky.magic.handler.EmptyChannelHandler;
+import com.sky.magic.handler.chain.ChannelChain;
 import com.sky.magic.handler.chain.DefaultChannelChain;
-
-import junit.framework.TestCase;
+import com.sky.magic.handler.wrapper.ChannelHandlerWrapper;
 
 public class ChannelChainTest extends TestCase {
 	private ChannelChain dataChain = null;
@@ -39,10 +40,10 @@ public class ChannelChainTest extends TestCase {
 		ChannelHandler handler2 = dataChain.getChannelHandler("two");
 		assertTrue(handler2!=null);
 		
-		assertTrue(handler1.getPrevHandler().equals(handler2));
-		assertTrue(handler1.getNextHandler() instanceof EmptyChannelHandler);
-		assertTrue(handler2.getPrevHandler() instanceof EmptyChannelHandler);
-		assertTrue(handler2.getNextHandler().equals(handler1));
+		ChannelHandlerWrapper wrapper1 = dataChain.getChannelHandlerWrapper("one");
+		ChannelHandlerWrapper wrapper2 = dataChain.getChannelHandlerWrapper("two");
+		ChannelHandlerWrapper theAssert = wrapper1.getPrevWrapper();
+		assertTrue(theAssert.equals(wrapper2));
 	}
 	
 	public void testAddLast() {
@@ -57,10 +58,10 @@ public class ChannelChainTest extends TestCase {
 		ChannelHandler handler2 = dataChain.getChannelHandler("two");
 		assertTrue(handler2!=null);
 		
-		assertTrue(handler1.getPrevHandler() instanceof EmptyChannelHandler);
-		assertTrue(handler1.getNextHandler().equals(handler2));
-		assertTrue(handler2.getPrevHandler().equals(handler1));
-		assertTrue(handler2.getNextHandler() instanceof EmptyChannelHandler);
+		ChannelHandlerWrapper wrapper1 = dataChain.getChannelHandlerWrapper("one");
+		ChannelHandlerWrapper wrapper2 = dataChain.getChannelHandlerWrapper("two");
+		ChannelHandlerWrapper theAssert = wrapper1.getNextWrapper();
+		assertTrue(theAssert.equals(wrapper2));
 	}
 	
 	public void testAddBefore() {
@@ -77,12 +78,10 @@ public class ChannelChainTest extends TestCase {
 		ChannelHandler handlert = dataChain.getChannelHandler("the");
 		assertTrue(handlert!=null);
 		
-		assertTrue(handler1.getPrevHandler() instanceof EmptyChannelHandler);
-		assertTrue(handler1.getNextHandler().equals(handlert));
-		assertTrue(handlert.getPrevHandler().equals(handler1));
-		assertTrue(handlert.getNextHandler().equals(handler2));
-		assertTrue(handler2.getPrevHandler().equals(handlert));
-		assertTrue(handler2.getNextHandler() instanceof EmptyChannelHandler);
+		ChannelHandlerWrapper theWrapper = dataChain.getChannelHandlerWrapper("the");
+		ChannelHandlerWrapper wrapper1 = dataChain.getChannelHandlerWrapper("one");
+		ChannelHandlerWrapper theAssert = theWrapper.getPrevWrapper();
+		assertTrue(theAssert.equals(wrapper1));
 	}
 
 	public void testAddAfter() {
@@ -99,12 +98,10 @@ public class ChannelChainTest extends TestCase {
 		ChannelHandler handlert = dataChain.getChannelHandler("the");
 		assertTrue(handlert!=null);
 		
-		assertTrue(handler1.getPrevHandler() instanceof EmptyChannelHandler);
-		assertTrue(handler1.getNextHandler().equals(handler2));
-		assertTrue(handler2.getPrevHandler().equals(handler1));
-		assertTrue(handler2.getNextHandler().equals(handlert));
-		assertTrue(handlert.getPrevHandler().equals(handler2));
-		assertTrue(handlert.getNextHandler() instanceof EmptyChannelHandler);
+		ChannelHandlerWrapper twoWrapper = dataChain.getChannelHandlerWrapper("two");
+		ChannelHandlerWrapper theWrapper = dataChain.getChannelHandlerWrapper("the");
+		ChannelHandlerWrapper theAssert = twoWrapper.getNextWrapper();
+		assertTrue(theAssert.equals(theWrapper));
 	}
 	
 	public void tearDown() throws Exception {

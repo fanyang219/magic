@@ -6,7 +6,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 
 import com.sky.magic.channel.ChannelException;
-import com.sky.magic.channel.EventLoop;
+import com.sky.magic.channel.nio.eventloop.EventLoop;
 import com.sky.magic.channel.nio.eventloop.boss.NioClientBoss;
 import com.sky.magic.util.MLog;
 

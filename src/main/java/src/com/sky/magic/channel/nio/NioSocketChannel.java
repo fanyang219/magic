@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
 import com.sky.magic.channel.ChannelException;
-import com.sky.magic.channel.EventLoop;
 import com.sky.magic.channel.nio.eventloop.EmptyNioEventLoop;
-import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.channel.nio.eventloop.EventLoop;
+import com.sky.magic.handler.chain.ChannelChain;
 
 public class NioSocketChannel extends AbstractNioChannel {
 	private SocketChannel socket = null;

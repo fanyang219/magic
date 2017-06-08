@@ -6,7 +6,7 @@ import java.nio.channels.SocketChannel;
 import com.sky.magic.channel.nio.NioServerChannel;
 import com.sky.magic.channel.nio.NioWorkerChannel;
 import com.sky.magic.channel.nio.eventloop.NioEventLoop;
-import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.chain.ChannelChain;
 import com.sky.magic.util.MLog;
 
 /**

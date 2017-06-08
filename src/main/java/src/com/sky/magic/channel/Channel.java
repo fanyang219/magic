@@ -2,7 +2,7 @@ package com.sky.magic.channel;
 
 import java.net.InetSocketAddress;
 
-import com.sky.magic.handler.ChannelChain;
+import com.sky.magic.handler.chain.ChannelChain;
 
 /**
  * 数据通道接口类
