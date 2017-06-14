@@ -65,8 +65,9 @@ public class ChannelChainTest extends TestCase {
 	}
 	
 	public void testAddBefore() {
+		dataChain.clear();
 		dataChain.addFirst("one", oneHandler);
-		dataChain.addLast("two", twoHandler);
+		dataChain.addFirst("two", twoHandler);
 		dataChain.addBefore("two", "the", theHandler);
 		
 		ChannelHandler handler1 = dataChain.getChannelHandler("one");
@@ -79,12 +80,30 @@ public class ChannelChainTest extends TestCase {
 		assertTrue(handlert!=null);
 		
 		ChannelHandlerWrapper theWrapper = dataChain.getChannelHandlerWrapper("the");
+		ChannelHandlerWrapper wrapper2 = dataChain.getChannelHandlerWrapper("two");
+		ChannelHandlerWrapper theAssert = theWrapper.getNextWrapper();
+		assertTrue(theAssert.equals(wrapper2));
+	}
+	
+	public void testAddBefore1() {
+		dataChain.clear();
+		dataChain.addFirst("one", oneHandler);
+		dataChain.addBefore("one", "the", theHandler);
+		
+		ChannelHandler handler1 = dataChain.getChannelHandler("one");
+		assertTrue(handler1!=null);
+		
+		ChannelHandler handlert = dataChain.getChannelHandler("the");
+		assertTrue(handlert!=null);
+		
+		ChannelHandlerWrapper theWrapper = dataChain.getChannelHandlerWrapper("the");
 		ChannelHandlerWrapper wrapper1 = dataChain.getChannelHandlerWrapper("one");
-		ChannelHandlerWrapper theAssert = theWrapper.getPrevWrapper();
-		assertTrue(theAssert.equals(wrapper1));
+		ChannelHandlerWrapper assert1 = theWrapper.getNextWrapper();
+		assertTrue(assert1.equals(wrapper1));
 	}
 
 	public void testAddAfter() {
+		dataChain.clear();
 		dataChain.addFirst("one", oneHandler);
 		dataChain.addLast("two", twoHandler);
 		dataChain.addAfter("two", "the", theHandler);

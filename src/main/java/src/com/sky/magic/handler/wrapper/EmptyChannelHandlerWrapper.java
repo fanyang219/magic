@@ -30,6 +30,11 @@ public class EmptyChannelHandlerWrapper implements ChannelHandlerWrapper {
 		// TODO Auto-generated method stub
 	}
 	
+	public void addBetween(ChannelHandlerWrapper prevWrapper,
+			ChannelHandlerWrapper nextWrapper) {
+		// TODO Auto-generated method stub	
+	}
+	
 	public String getName() {
 		return "Empty";
 	}
@@ -40,5 +45,13 @@ public class EmptyChannelHandlerWrapper implements ChannelHandlerWrapper {
 	
 	public String toString() {
 		return "Empty";
+	}
+
+	public boolean hasPrevWrapper() {
+		return false;
+	}
+
+	public boolean hasNextWrapper() {
+		return false;
 	}
 }

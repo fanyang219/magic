@@ -19,6 +19,9 @@ public interface ChannelChain {
 	
 	ChannelHandlerWrapper getChannelHandlerWrapper(String name);
 	
-	// 处理通道事件
-	void handleEvent(ChannelEvent event);
+	// 处理上游事件
+	void sendUpstream(ChannelEvent event);
+	
+	// 处理下游事件
+	void sendDownstream(ChannelEvent event);
 }

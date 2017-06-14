@@ -7,7 +7,7 @@ import com.sky.magic.channel.ChannelEvent;
  * @author xufan
  */
 public class DefaultChannelHandler implements ChannelHandler {
-	public void handleEvent(ChannelEvent event) {
-		// TODO Auto-generated method stub
+	public boolean handleEvent(ChannelEvent event) {
+		return false;
 	}
 }

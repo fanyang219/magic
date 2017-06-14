@@ -3,10 +3,12 @@ package com.sky.magic.example.simple;
 import com.sky.magic.bootstrap.ServerBootstrap;
 import com.sky.magic.channel.ChannelEvent;
 import com.sky.magic.channel.Channels;
+import com.sky.magic.channel.event.MessageEvent;
 import com.sky.magic.channel.nio.NioServerChannelFactory;
-import com.sky.magic.handler.EmptyChannelHandler;
+import com.sky.magic.handler.ChannelHandler;
 import com.sky.magic.handler.chain.ChannelChain;
 import com.sky.magic.handler.chain.ChannelChainFactory;
+import com.sky.magic.util.Constants;
 import com.sky.magic.util.MLog;
 
 /**
@@ -16,7 +18,6 @@ import com.sky.magic.util.MLog;
  */
 public class SimpleServer {
 	private static final String TAG = SimpleServer.class.getSimpleName();
-	private static final int SERVER_PORT = 8010;
 	
 	public void start() {
 		// 配置数据通道
@@ -26,29 +27,35 @@ public class SimpleServer {
 			public ChannelChain getChannelChain() {
 				ChannelChain chain = Channels.newChannelChain();
 				
-//				chain.addFirst("test", new TestServerHandler());
-				chain.addLast("simple", new SimpleServerHandler());
+				chain.addLast("message", new MessageServerHandler());
+				chain.addLast("test", new TestServerHandler());
 				
 				return chain;
 			}
 		});
 		// 绑定服务端口
-		bootstrap.bind(SERVER_PORT);
+		bootstrap.bind(Constants.SERVER_PORT);
 	}
 	
 	public static void main(String args[]) {
 		new SimpleServer().start();
 	}
 	
-	class TestServerHandler extends EmptyChannelHandler {
-		public void handleEvent(ChannelEvent event) {
+	class TestServerHandler implements ChannelHandler {
+		public boolean handleEvent(ChannelEvent event) {
 			MLog.log(TAG, "Server handle event in test.******");
+			return false;
 		}
 	}
 	
-	class SimpleServerHandler extends EmptyChannelHandler {
-		public void handleEvent(ChannelEvent event) {
-			MLog.log(TAG, "Server handle event in simple.******");
+	class MessageServerHandler implements ChannelHandler {
+		public boolean handleEvent(ChannelEvent event) {
+			MLog.log(TAG, "Server handle event in message.******");
+			if(event instanceof MessageEvent) {
+				MessageEvent messageEvent = (MessageEvent) event;
+				MLog.log(TAG, "Handle message:"+messageEvent.getMessage());
+			}
+			return true;
 		}
 	}
 }

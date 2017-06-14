@@ -14,21 +14,23 @@ public class DefaultChannelHandlerWrapper implements ChannelHandlerWrapper {
 		this.handler = handler;
 	}
 	
+	public boolean hasPrevWrapper() {
+		return prevWrapper != null;
+	}
+	
 	public ChannelHandlerWrapper getPrevWrapper() {
-		if(prevWrapper==null) {
-			prevWrapper = new EmptyChannelHandlerWrapper();
-		}
 		return prevWrapper;
 	}
 
 	public void setPrevWrapper(ChannelHandlerWrapper prevWrapper) {
 		this.prevWrapper = prevWrapper;
 	}
+	
+	public boolean hasNextWrapper() {
+		return nextWrapper != null;
+	}
 
 	public ChannelHandlerWrapper getNextWrapper() {
-		if(nextWrapper==null) {
-			nextWrapper = new EmptyChannelHandlerWrapper();
-		}
 		return nextWrapper;
 	}
 
@@ -46,6 +48,12 @@ public class DefaultChannelHandlerWrapper implements ChannelHandlerWrapper {
 		setPrevWrapper(wrapper);
 	}
 
+	public void addBetween(ChannelHandlerWrapper prevWrapper,
+			ChannelHandlerWrapper nextWrapper) {
+		addBefore(nextWrapper);
+		addAfter(prevWrapper);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -55,8 +63,18 @@ public class DefaultChannelHandlerWrapper implements ChannelHandlerWrapper {
 	}
 	
 	public String toString() {
-		return "name:"+name
-				+",prev:"+getPrevWrapper()
-				+",next:"+getNextWrapper();
+		StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("(");
+		buffer.append("name:");
+		buffer.append(name);
+		buffer.append(", ");
+		if(handler!=null) {
+			buffer.append("handler:");
+			buffer.append(handler.getClass().getSimpleName());
+		}
+		buffer.append(")");
+		
+		return buffer.toString();
 	}
 }

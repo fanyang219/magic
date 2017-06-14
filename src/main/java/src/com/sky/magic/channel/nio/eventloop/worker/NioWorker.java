@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
-import com.sky.magic.channel.ChannelEvent;
+import com.sky.magic.channel.event.MessageEvent;
 import com.sky.magic.channel.nio.NioSocketChannel;
 import com.sky.magic.channel.nio.eventloop.NioEventLoop;
 import com.sky.magic.util.MLog;
@@ -41,6 +41,6 @@ public class NioWorker extends NioEventLoop implements Worker {
 		MLog.log(TAG, "Server Read some data:"+msg, getName());
 		
 		// 触发数据处理器
-		channel.getChain().handleEvent(new ChannelEvent());
+		channel.getChain().sendUpstream(new MessageEvent(msg));
 	}
 }
