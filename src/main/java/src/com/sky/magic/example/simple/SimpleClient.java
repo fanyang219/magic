@@ -5,11 +5,13 @@ import java.net.InetSocketAddress;
 import com.sky.magic.bootstrap.ClientBootstrap;
 import com.sky.magic.channel.ChannelEvent;
 import com.sky.magic.channel.Channels;
+import com.sky.magic.channel.event.MessageEvent;
 import com.sky.magic.channel.nio.NioClientChannelFactory;
 import com.sky.magic.handler.ChannelHandler;
 import com.sky.magic.handler.chain.ChannelChain;
 import com.sky.magic.handler.chain.ChannelChainFactory;
 import com.sky.magic.util.Constants;
+import com.sky.magic.util.MLog;
 
 /**
  * 简易客户端 发送数据:中文或英文数据
@@ -39,14 +41,19 @@ public class SimpleClient {
 			ChannelChain chain = Channels.newChannelChain();
 
 			// 配置数据处理链
-			chain.addLast("client", new ClientChannelHandler());
+			chain.addLast("message", new ClientMessageHandler());
 
 			return chain;
 		}
 	}
 
-	class ClientChannelHandler implements ChannelHandler {
+	class ClientMessageHandler implements ChannelHandler {
 		public boolean handleEvent(ChannelEvent event) {
+			if(event instanceof MessageEvent) {
+				MLog.log(TAG, "Server handle event in message.******");
+				MessageEvent messageEvent = (MessageEvent) event;
+				MLog.log(TAG, "Handle message:"+messageEvent.getMessage());
+			}
 			return false;
 		}
 	}

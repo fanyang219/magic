@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 
 import com.sky.magic.channel.Channel;
 import com.sky.magic.channel.ChannelFactory;
+import com.sky.magic.util.Constants;
 import com.sky.magic.util.MLog;
 
 /**
@@ -15,7 +16,7 @@ public class ServerBootstrap extends Bootstrap {
 	
 	public ServerBootstrap(ChannelFactory factory) {
 		super(factory);
-		MLog.log(TAG, "1.Config channel factory.", "server-start");
+		MLog.log(TAG, "1.Config channel factory.", Constants.LOG_SERVER_START);
 	}
 	
 	public void bind(int port) {
@@ -27,7 +28,7 @@ public class ServerBootstrap extends Bootstrap {
 	 * @param address 数据通讯地址
 	 */
 	public void bind(InetSocketAddress address) {
-		MLog.log(TAG, "2.Bind server port:"+address.getPort(), "server-start");
+		MLog.log(TAG, "2.Bind server port:"+address.getPort(), Constants.LOG_SERVER_START);
 		if(address==null) { // 保护处理
 			throw new NullPointerException("address");
 		}

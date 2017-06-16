@@ -37,7 +37,7 @@ public class NioClientBoss extends NioEventLoop implements Boss {
 			}
 			
 			try {
-				clientSocket.write(ByteBuffer.wrap("We Connect OK. Welcome to magic.".getBytes()));
+				clientSocket.write(ByteBuffer.wrap("clienthello".getBytes()));
 				clientSocket.register(getSelector(), SelectionKey.OP_READ);
 			} catch (IOException e) {
 				e.printStackTrace();

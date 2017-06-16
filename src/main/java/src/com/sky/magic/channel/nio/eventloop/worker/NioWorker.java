@@ -40,7 +40,10 @@ public class NioWorker extends NioEventLoop implements Worker {
 		String msg = new String(buffer.array()).trim();
 		MLog.log(TAG, "Server Read some data:"+msg, getName());
 		
-		// 触发数据处理器
-		channel.getChain().sendUpstream(new MessageEvent(msg));
+		
+		// 读取数据后，生成消息事件并向上游传送
+		MessageEvent messageEvent = new MessageEvent(channel, msg);
+		// 触发数据处理链
+		channel.getChain().handleUpstream(messageEvent);
 	}
 }

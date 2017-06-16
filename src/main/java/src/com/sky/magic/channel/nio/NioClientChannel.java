@@ -8,6 +8,7 @@ import java.nio.channels.SelectionKey;
 import com.sky.magic.channel.ChannelException;
 import com.sky.magic.channel.nio.eventloop.EventLoop;
 import com.sky.magic.channel.nio.eventloop.boss.NioClientBoss;
+import com.sky.magic.util.Constants;
 import com.sky.magic.util.MLog;
 
 public class NioClientChannel extends NioSocketChannel {
@@ -32,7 +33,7 @@ public class NioClientChannel extends NioSocketChannel {
 	}
 
 	private void registerKeys() {
-		MLog.log(TAG, "3.Register connect key on selector.", "client-start");
+		MLog.log(TAG, "3.Register connect key on selector.", Constants.LOG_CLIENT_START);
 		try {
 			getSocket().register(getEventLoop().getSelector(), SelectionKey.OP_CONNECT, this);
 		} catch (ClosedChannelException e) {

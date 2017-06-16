@@ -20,8 +20,8 @@ public interface ChannelChain {
 	ChannelHandlerWrapper getChannelHandlerWrapper(String name);
 	
 	// 处理上游事件
-	void sendUpstream(ChannelEvent event);
+	void handleUpstream(ChannelEvent event);
 	
 	// 处理下游事件
-	void sendDownstream(ChannelEvent event);
+	void handleDownstream(ChannelEvent event);
 }

@@ -27,7 +27,7 @@ public class SimpleServer {
 			public ChannelChain getChannelChain() {
 				ChannelChain chain = Channels.newChannelChain();
 				
-				chain.addLast("message", new MessageServerHandler());
+				chain.addLast("message", new ServerMessageHandler());
 				chain.addLast("test", new TestServerHandler());
 				
 				return chain;
@@ -48,12 +48,16 @@ public class SimpleServer {
 		}
 	}
 	
-	class MessageServerHandler implements ChannelHandler {
+	class ServerMessageHandler implements ChannelHandler {
 		public boolean handleEvent(ChannelEvent event) {
 			MLog.log(TAG, "Server handle event in message.******");
 			if(event instanceof MessageEvent) {
 				MessageEvent messageEvent = (MessageEvent) event;
+				String message = messageEvent.getMessage();
 				MLog.log(TAG, "Handle message:"+messageEvent.getMessage());
+				if("clienthello".equals(message)) {
+					event.getChannel().write("serverhello");
+				}
 			}
 			return true;
 		}

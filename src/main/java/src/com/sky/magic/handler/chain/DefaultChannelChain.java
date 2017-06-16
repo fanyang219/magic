@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.sky.magic.channel.ChannelEvent;
 import com.sky.magic.handler.ChannelHandler;
+import com.sky.magic.handler.sink.ChannelSink;
+import com.sky.magic.handler.sink.EmptyChannelSink;
 import com.sky.magic.handler.wrapper.ChannelHandlerWrapper;
 import com.sky.magic.handler.wrapper.DefaultChannelHandlerWrapper;
 import com.sky.magic.util.MLog;
@@ -21,6 +23,8 @@ public class DefaultChannelChain implements ChannelChain {
 	private Map<String, ChannelHandlerWrapper> wrapperMap = null;
 	private ChannelHandlerWrapper headWrapper = null;
 	private ChannelHandlerWrapper tailWrapper = null;
+	
+	private ChannelSink channelSink = null;
 	
 	public void addFirst(String name, ChannelHandler handler) {
 		// 校验是否已存在
@@ -145,44 +149,57 @@ public class DefaultChannelChain implements ChannelChain {
 		return wrapperMap;
 	}
 
-	// 向后处理通道事件
-	public void sendDownstream(ChannelEvent event) {
+	// 向下处理通道事件
+	public void handleDownstream(ChannelEvent event) {
 		if(tailWrapper==null) {
 			MLog.log(TAG, "The chain contains no handlers, discarding:"+event);
 			return;
 		}
 		// 链式处理事件(当前处理器执行完毕后，自动调用下一个处理器)
-		sendDownstream(tailWrapper, event);
+		handleDownstream(tailWrapper, event);
 	}
 	
-	// 从某个节点往后，处理事件
-	public void sendDownstream(ChannelHandlerWrapper wrapper, ChannelEvent event) {
-		boolean isHandled = wrapper.getHandler().handleEvent(event);
-		if(!isHandled && wrapper.hasPrevWrapper()) { // 如果事件未处理，并且存在前面的节点，则交给前面的节点处理
-			MLog.log(TAG, "The wrapper has not handle, so call previous wrapper to handle:"+event);
-			sendDownstream(wrapper.getPrevWrapper(), event);
+	// 从某个节点向下，处理事件
+	public void handleDownstream(ChannelHandlerWrapper wrapper, ChannelEvent event) {
+		boolean handleFlag = wrapper.getHandler().handleEvent(event);
+//		if(!handleFlag && wrapper.hasPrevWrapper()) { // 如果事件未处理，并且存在前面的节点，则交给前面的节点处理
+		// TODO 是否需要处理handleFlag
+		if(wrapper.hasPrevWrapper()) { // 如果存在前面的节点，则交给前面的节点处理
+			MLog.log(TAG, "The wrapper has prev wrapper, so call previous wrapper to handle:"+event);
+			handleDownstream(wrapper.getPrevWrapper(), event);
+		} else { // 如果没有前面的节点，业务处理链已经处理完毕，则交给channelSink与socket直接交互
+			MLog.log(TAG, "The wrapper has no prev wrapper, so call channel sink to handle.");
+			getChannelSink().handleSink(event);
 		}
 	}
 	
-	// 向后处理通道事件
-	public void sendUpstream(ChannelEvent event) {
+	// 向上处理通道事件
+	public void handleUpstream(ChannelEvent event) {
 		if(headWrapper==null) {
 			MLog.log(TAG, "The chain contains no handlers, discarding:"+event);
 			return;
 		}
 		// 链式处理事件(当前处理器执行完毕后，自动调用下一个处理器)
-		sendUpstream(headWrapper, event);
+		handleUpstream(headWrapper, event);
 	}
 	
-	// 从某个节点往后，处理事件
-	public void sendUpstream(ChannelHandlerWrapper wrapper, ChannelEvent event) {
-		boolean isHandled = wrapper.getHandler().handleEvent(event);
-		if(!isHandled && wrapper.hasNextWrapper()) { // 如果事件未处理，并且存在后面的节点，则交给后面的节点处理
-			MLog.log(TAG, "The wrapper has not handle, so call next wrapper to handle:"+event);
-			sendUpstream(wrapper.getNextWrapper(), event);
+	// 从某个节点向上，处理事件
+	public void handleUpstream(ChannelHandlerWrapper wrapper, ChannelEvent event) {
+		wrapper.getHandler().handleEvent(event);
+		if(wrapper.hasNextWrapper()) { // 如果事件未处理，并且存在后面的节点，则交给后面的节点处理
+			MLog.log(TAG, "The wrapper has next wrapper, so call next wrapper to handle:"+event);
+			handleUpstream(wrapper.getNextWrapper(), event);
 		} else {
-			MLog.log(TAG, "The wrapper has handle, so stop handle.");
+			MLog.log(TAG, "The wrapper has no next wrapper, so stop handle.");
 		}
+	}
+	
+	// 获取与channel直接交互的处理器(读写等)
+	private ChannelSink getChannelSink() {
+		if(channelSink == null) {
+			channelSink = new EmptyChannelSink();
+		}
+		return channelSink;
 	}
 	
 	public String toString() {

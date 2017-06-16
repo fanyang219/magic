@@ -15,6 +15,8 @@ public interface Channel {
 	
 	void loopEvent();
 	
+	void write(String message);
+	
 	void setChain(ChannelChain chain);
 	
 	ChannelChain getChain();

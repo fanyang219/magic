@@ -16,7 +16,11 @@ public abstract class AbstractChannel implements Channel {
 	public void connect(InetSocketAddress address) {
 		// TODO Auto-generated method stub
 	}
-
+	
+	public void write(String message) {
+		Channels.write(this, message);
+	}
+	
 	public ChannelChain getChain() {
 		if(chain==null) {
 			chain = Channels.newChannelChain();

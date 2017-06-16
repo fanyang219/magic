@@ -12,6 +12,7 @@ import com.sky.magic.channel.ChannelException;
 import com.sky.magic.channel.nio.eventloop.EventLoop;
 import com.sky.magic.channel.nio.eventloop.NioEventLoop;
 import com.sky.magic.channel.nio.eventloop.boss.NioServerBoss;
+import com.sky.magic.util.Constants;
 import com.sky.magic.util.MLog;
 
 public class NioServerChannel extends AbstractChannel {
@@ -39,7 +40,7 @@ public class NioServerChannel extends AbstractChannel {
 	}
 	
 	private void registerKeys() {
-		MLog.log(TAG, "3.Register accept key on selector.", "server-start");
+		MLog.log(TAG, "3.Register accept key on selector.", Constants.LOG_SERVER_START);
 		try {
 			getSocket().register(getEventLoop().getSelector(), SelectionKey.OP_ACCEPT, this);
 		} catch (ClosedChannelException e) {
